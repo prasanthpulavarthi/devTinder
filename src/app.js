@@ -7,16 +7,10 @@ app.use("/test",(req,res)=>{
 })
 
 app.get("/user",(req,res)=>{
+    console.log(req.query)
     res.send({firstName:"sai",lastName:"prasanth"})
 })
-app.post("/user",(req,res)=>{
-    //data saved in database
-    res.send("data saved successfully")
-})
-app.delete("/user",(req,res)=>{
-    //data saved in database
-    res.send("data deleted")
-})
+
 
 
 
