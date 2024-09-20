@@ -10,3 +10,10 @@
 -use of regex in routes
 -Reading the query params in routes
 -reading the dynamic routes
+
+
+ep-5
+-multiple route handlers
+-next()
+-next function and errors along with res.send()
+-app.use( "route",rH,[rH2,rH3],rH4  )
