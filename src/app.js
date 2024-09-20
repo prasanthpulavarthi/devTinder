@@ -1,21 +1,26 @@
 const express= require('express');
 const app=express()
+const {adminAuthHandler,userAuthHandler}=require("./middleware/Auth")
 
 
-app.get("/user",
+app.use("/admin",adminAuthHandler)
+
+app.get("/admin/getAllUser",(req,res)=>{
+    res.send("data received")
+})
+
+app.get("/user/login",
     (req,res,next)=>
     {
-    // res.send("handler 1")
-    next()
+    res.send("user Logim")
 },
-(req,res,next)=>
+)
+
+app.get("/user/data",userAuthHandler,
+    (req,res,next)=>
     {
-    // res.send("handler 2")
-    next()
+    res.send("handler 1")
 },
-
-
-
 )
 
 

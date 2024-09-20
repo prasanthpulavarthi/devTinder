@@ -17,3 +17,6 @@ ep-5
 -next()
 -next function and errors along with res.send()
 -app.use( "route",rH,[rH2,rH3],rH4  )
+-what is middleware
+-how expressjs basically handles request behind the scenes
+-difference between app.use and app.all
