@@ -35,3 +35,9 @@ ep-5
 -create /signup API  to add data to database
 -push some documents using API calls from posman.
 -error handling using try,catch
+
+
+Ep-7
+-difference between jsobject and json object.
+-add the express.json  middleware to your app
+-make your signUp api dynamic to receive data from the end user/
