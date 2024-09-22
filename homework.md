@@ -20,3 +20,18 @@ ep-5
 -what is middleware
 -how expressjs basically handles request behind the scenes
 -difference between app.use and app.all
+-write a dummy auth for middleware for admin
+-write a dummy auth for user except login
+-error handling  using app.use("/",(err,req,res)=>{
+    res.send("something went wrong ")
+}) has to write last
+- write try and catch
+
+--ep6
+-install mongoose.
+-connect your app to database with connctingstring/devTinder.
+-call the connectDB function and connect to database before starting application to 3000
+-create a user Scheme
+-create /signup API  to add data to database
+-push some documents using API calls from posman.
+-error handling using try,catch

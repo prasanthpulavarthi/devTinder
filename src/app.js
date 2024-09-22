@@ -1,29 +1,46 @@
 const express= require('express');
+const connectDB = require("./utils/database");
+const User=require("./models/user")
+
 const app=express()
-const {adminAuthHandler,userAuthHandler}=require("./middleware/Auth")
 
 
-app.use("/admin",adminAuthHandler)
-
-app.get("/admin/getAllUser",(req,res)=>{
-    res.send("data received")
+app.post("/signup", async(req,res)=>{
+const user= new User({
+    firstName:"sai",
+    lastName:"prasanth",
+    emailId:"prasanthPulavarthi@gmial.com",
+    password:"qwrty"
 })
 
-app.get("/user/login",
-    (req,res,next)=>
-    {
-    res.send("user Logim")
-},
-)
+try{
+    await user.save();
+    res.send("data posted succssfuly")
+}
+catch(err){
+    res.status(400).send("error saving the user"+err.messsage)
 
-app.get("/user/data",userAuthHandler,
-    (req,res,next)=>
-    {
-    res.send("handler 1")
-},
-)
+}
 
 
 
+})
 
-app.listen(3000)
+
+
+connectDB()
+.then(()=>{
+    console.log("conncted succssfully");
+app.listen(3000,()=>{
+    console.log("server is listnong to port 3000")
+})
+
+
+})
+.catch((err)=>{
+    console.log("not connectd")
+})
+
+
+
+
