@@ -1,6 +1,6 @@
 const mongoose=require("mongoose");
 const connectDB=async()=>{
-    await mongoose.connect("mongodb+srv://saisai:saisai995@sainode.hpez8dk.mongodb.net/devTinder")
+    await mongoose.connect("mongodb+srv://saisai:saisai123@sainode.f2utjpy.mongodb.net/devTinder")
 }
 
 
