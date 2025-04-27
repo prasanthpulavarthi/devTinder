@@ -2,9 +2,13 @@ const express=require("express");
 const {connectDB}=require("./config/database")
 const app=express();
 const User=require("./models/user")
-const {validateSignUpData}=require("./utils/validation")
+const {validateSignUpData}=require("./utils/validation");
+const cookieParser=require("cookie-parser");
+const jwt=require("jsonwebtoken");
 app.use(express.json())
+app.use(cookieParser())
 // const {authUser}=require("./middleware/authuser")
+const {userAuth}=require("./middleware/userauth");
 const bcrypt=require("bcryptjs")
 
 app.post("/signup",async(req,res)=>{
@@ -12,7 +16,6 @@ app.post("/signup",async(req,res)=>{
         validateSignUpData(req);
         const {firstName,emailId,password}=req.body;
         const passwordHash=await bcrypt.hash(password,10)
-      console.log(passwordHash)  
         const user= new User({firstName,emailId,password:passwordHash});
         await user.save()
         res.send("data saved successfully")
@@ -36,8 +39,12 @@ app.post("/login",async (req,res)=>{
             throw new Error("invalid credentials")
         }
 
-        const isPasswordValid=await bcrypt.compare(password,user.password);
+        const isPasswordValid=await user.validatePassword(password);
         if(isPasswordValid){
+            const token=await user.getJWT();
+           
+
+            res.cookie("token",token,{expires:new Date(Date.now()+1*360000)});
             res.send("user login successful")
         }
         else{
@@ -51,42 +58,25 @@ app.post("/login",async (req,res)=>{
         res.status(400).send(err.message)
     }
 })
-
-
-app.patch("/user/:userId",async(req,res)=>{
-    const userId=req.params?.userId;
-    const data=req.body;
-   
+app.get("/profile",userAuth, async(req,res)=>{
     try{
-        const ALLOWED_UPDATES=["about","gender","photoUrl","skills"];
-        const isUpdateAllowed=Object.keys(data).every((k)=>
-            ALLOWED_UPDATES.includes(k)
-    );
-        if(!isUpdateAllowed){
-            throw new Error("update not allowed");
-        };
-        if(data?.skills.length>10){
-            throw new Error("skill cannot be more than 10")
-        }
-        const user=await User.findByIdAndUpdate({_id:userId},data,{
-            returnDocument:"after",
-            runValidators:true
-        });
-    }
-    catch(err){
+    
+    const user=req.user;
+    
+    res.send(user)
+    }catch(err){
         res.status(400).send("update error: "+err.message)
     }
-
-});
-app.get("/user",async (req,res)=>{
-    try{
-        const user=await User.findOne({age:req.body.age})
-        res.send(user)
-
-    }catch(err){
-        res.status(err.message)
-    }
 })
+app.post("/sendconnectionrequest",userAuth,async(req,res)=>{
+    const user=req.user;
+
+    console.log("sending connection request");
+    res.send(user.firstName+" sent a connection request")
+})
+
+
+
 app.delete("/user",async (req,res)=>{
     try{
         const name=req.body.firstName;
